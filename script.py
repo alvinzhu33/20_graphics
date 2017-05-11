@@ -21,7 +21,30 @@ from draw import *
   jdyrlandweaver
   ==================== """
 def first_pass( commands ):
-    pass
+    fnameC = 0;
+    basenameC = 0;
+    varyC = 0;
+    
+    for command in commands:
+        c = command[0]
+        args = command[1:]
+        
+        if command == "fnames":
+            fnames = args[0];
+            fnameC += 1;
+        if command == "basename":
+            basename = args[0]
+            basenameC += 1;
+        if command == "varyC":
+            varyC += 1;
+
+    if !fnameC or !basenameC:
+        if varyC > 0 and !fnameC:
+            print("Using vary without frames");
+            return
+        if fnameC and !basenameC:
+            basenameC = "simple"
+        
 
 
 """======== second_pass( commands ) ==========
