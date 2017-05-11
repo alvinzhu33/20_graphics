@@ -41,11 +41,10 @@ def first_pass( commands ):
     if !fnameC or !basenameC:
         if varyC > 0 and !fnameC:
             print("Using vary without frames");
-            return
+            exit()
         if fnameC and !basenameC:
             basenameC = "simple"
         
-
 
 """======== second_pass( commands ) ==========
 
@@ -65,7 +64,10 @@ def first_pass( commands ):
   appropirate value. 
   ===================="""
 def second_pass( commands, num_frames ):
-    pass
+    knob = [num_frames]
+
+    for command in commands:
+        
 
 
 def run(filename):
