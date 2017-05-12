@@ -21,29 +21,27 @@ from draw import *
   jdyrlandweaver
   ==================== """
 def first_pass( commands ):
-    fnameC = 0;
-    basenameC = 0;
+    num_frames = 0;
+    basename = '';
     varyC = 0;
     
     for command in commands:
         c = command[0]
         args = command[1:]
         
-        if command == "fnames":
-            fnames = args[0];
-            fnameC += 1;
-        if command == "basename":
-            basename = args[0]
-            basenameC += 1;
-        if command == "varyC":
+        if c == "frames":
+            num_frames = int(args[0]);
+        if c == "basename":
+            basename = args[0];
+        if c == "varyC":
             varyC += 1;
 
-    if !fnameC or !basenameC:
-        if varyC > 0 and !fnameC:
-            print("Using vary without frames");
-            exit()
-        if fnameC and !basenameC:
-            basenameC = "simple"
+    if varyC > 0 and num_frame == 0:
+        print("Using vary without frames");
+        exit()
+    if num_frame and basename == '':
+        basenameC = "simple"
+        print("Set basename to default: simple");
         
 
 """======== second_pass( commands ) ==========
@@ -64,11 +62,18 @@ def first_pass( commands ):
   appropirate value. 
   ===================="""
 def second_pass( commands, num_frames ):
-    knob = [num_frames]
-
-    for command in commands:
+    knob = [dict() for x in range(num_frames)]
+    frame = 0;
         
+    for x in range(num_frames):
+        for command in commands:
+            args = command[1:]
+        
+            if command[0] == 'vary':
+                if x >= args[1] and x <= args[2]:
+                    knob[x][args[0]].append((args[4]-args[3])/(args[2]-args[1]+1));
 
+    return knob;
 
 def run(filename):
     """
@@ -91,8 +96,10 @@ def run(filename):
     screen = new_screen()
     tmp = []
     step = 0.1
+    firstpass();
+    secondpass();
     for command in commands:
-        print command
+        #print command
         c = command[0]
         args = command[1:]
 
