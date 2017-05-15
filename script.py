@@ -36,12 +36,14 @@ def first_pass( commands ):
         if c == "varyC":
             varyC += 1;
 
-    if varyC > 0 and num_frame == 0:
+    if varyC > 0 and num_frames == 0:
         print("Using vary without frames");
         exit()
-    if num_frame and basename == '':
+    if num_frames and basename == '':
         basenameC = "simple"
         print("Set basename to default: simple");
+
+    return num_frames, basename
         
 
 """======== second_pass( commands ) ==========
@@ -63,7 +65,6 @@ def first_pass( commands ):
   ===================="""
 def second_pass( commands, num_frames ):
     knob = [dict() for x in range(num_frames)]
-    frame = 0;
         
     for x in range(num_frames):
         for command in commands:
@@ -71,7 +72,9 @@ def second_pass( commands, num_frames ):
         
             if command[0] == 'vary':
                 if x >= args[1] and x <= args[2]:
-                    knob[x][args[0]].append((args[4]-args[3])/(args[2]-args[1]+1));
+                    print [x.get(args[0]) for x in range(num_frames)];
+                    knob[x][args[0]] = (float(args[4])-float(args[3]))/(float(args[2])-float(args[1]));
+                    print(knob[x])
 
     return knob;
 
@@ -96,8 +99,10 @@ def run(filename):
     screen = new_screen()
     tmp = []
     step = 0.1
-    firstpass();
-    secondpass();
+    
+    num_frames, basename = first_pass(commands);
+    second_pass(commands, num_frames);
+    
     for command in commands:
         #print command
         c = command[0]
