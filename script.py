@@ -72,9 +72,12 @@ def second_pass( commands, num_frames ):
         
             if command[0] == 'vary':
                 if x >= args[1] and x <= args[2]:
-                    print [x.get(args[0]) for x in range(num_frames)];
-                    knob[x][args[0]] = (float(args[4])-float(args[3]))/(float(args[2])-float(args[1]));
-                    print(knob[x])
+                    if x == args[1]:
+                        knob[x][args[0]] = float(args[3]);
+                    #print knob[x][args[0]];
+                    else:
+                        knob[x][args[0]] = knob[x-1][args[0]] + (float(args[4])-float(args[3]))/(float(args[2])-float(args[1]));
+                    print(str(x) + ": " + str(knob[x]))
 
     return knob;
 
