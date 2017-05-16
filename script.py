@@ -135,11 +135,15 @@ def run(filename):
             elif c == 'move':
                 tmp = make_translate(args[0], args[1], args[2])
                 matrix_mult(stack[-1], tmp)
+                if args[3] != None:
+                    scalar_mult(tmp, knob[x][args[3]]);
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
             elif c == 'scale':
                 tmp = make_scale(args[0], args[1], args[2])
                 matrix_mult(stack[-1], tmp)
+                if args[3] != None:
+                    scalar_mult(tmp, knob[x][args[3]]);
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
             elif c == 'rotate':
@@ -150,9 +154,11 @@ def run(filename):
                     tmp = make_rotY(theta)
                 else:
                     tmp = make_rotZ(theta)
-                    matrix_mult( stack[-1], tmp )
-                    stack[-1] = [ x[:] for x in tmp]
-                    tmp = []
+                if args[2] != None:
+                    scalar_mult(tmp, knob[x][args[2]]);
+                matrix_mult( stack[-1], tmp )
+                stack[-1] = [ x[:] for x in tmp]
+                tmp = []
             elif c == 'push':
                 stack.append([x[:] for x in stack[-1]] )
             elif c == 'pop':
