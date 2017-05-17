@@ -173,6 +173,6 @@ def run(filename):
         ident(tmp);
         stack = [ [x[:] for x in tmp] ];
         #display(screen);
-        save_extension(screen, 'anim/anim"%03d"%12');
+        save_extension(screen, 'anim/anim'+str(frame));
         clear_screen(screen);
         print frame;
