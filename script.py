@@ -108,7 +108,6 @@ def run(filename):
     
     for frame in range(num_frames):
         for command in commands:
-            #print command
             c = command[0]
             args = command[1:]
 
@@ -141,9 +140,12 @@ def run(filename):
             elif c == 'scale':
                 tmp = make_scale(args[0], args[1], args[2])
                 matrix_mult(stack[-1], tmp)
+                #print tmp;
                 if args[3] != None:
+                    #print "scale: " + str(knob[frame][args[3]]);
                     scalar_mult(tmp, knob[frame][args[3]]);
                 stack[-1] = [x[:] for x in tmp]
+                #print stack[-1]
                 tmp = []
             elif c == 'rotate':
                 theta = args[1] * (math.pi/180)
@@ -153,9 +155,9 @@ def run(filename):
                     tmp = make_rotY(theta)
                 else:
                     tmp = make_rotZ(theta)
+                matrix_mult( stack[-1], tmp )
                 if args[2] != None:
                     scalar_mult(tmp, knob[frame][args[2]]);
-                matrix_mult( stack[-1], tmp )
                 stack[-1] = [ x[:] for x in tmp]
                 tmp = []
             elif c == 'push':
@@ -167,4 +169,10 @@ def run(filename):
             elif c == 'save':
                 save_extension(screen, args[0])
 
-            save_extension(screen, 'anim%03d"%12');
+        tmp = new_matrix()
+        ident(tmp);
+        stack = [ [x[:] for x in tmp] ];
+        #display(screen);
+        save_extension(screen, 'anim/anim"%03d"%12');
+        clear_screen(screen);
+        print frame;
