@@ -105,9 +105,8 @@ def run(filename):
     
     num_frames, basename = first_pass(commands);
     knob = second_pass(commands, num_frames);
-    #print knob
-
-    for x in range(num_frames):
+    
+    for frame in range(num_frames):
         for command in commands:
             #print command
             c = command[0]
@@ -136,14 +135,14 @@ def run(filename):
                 tmp = make_translate(args[0], args[1], args[2])
                 matrix_mult(stack[-1], tmp)
                 if args[3] != None:
-                    scalar_mult(tmp, knob[x][args[3]]);
+                    scalar_mult(tmp, knob[frame][args[3]]);
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
             elif c == 'scale':
                 tmp = make_scale(args[0], args[1], args[2])
                 matrix_mult(stack[-1], tmp)
                 if args[3] != None:
-                    scalar_mult(tmp, knob[x][args[3]]);
+                    scalar_mult(tmp, knob[frame][args[3]]);
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
             elif c == 'rotate':
@@ -155,7 +154,7 @@ def run(filename):
                 else:
                     tmp = make_rotZ(theta)
                 if args[2] != None:
-                    scalar_mult(tmp, knob[x][args[2]]);
+                    scalar_mult(tmp, knob[frame][args[2]]);
                 matrix_mult( stack[-1], tmp )
                 stack[-1] = [ x[:] for x in tmp]
                 tmp = []
@@ -167,3 +166,5 @@ def run(filename):
                 display(screen)
             elif c == 'save':
                 save_extension(screen, args[0])
+
+            save_extension(screen, 'anim%03d"%12');
