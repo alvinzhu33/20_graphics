@@ -107,6 +107,12 @@ def run(filename):
     knob = second_pass(commands, num_frames);
     
     for frame in range(num_frames):
+        tmp = new_matrix()
+        ident(tmp);
+        stack = [ [x[:] for x in tmp] ];
+        tmp = []
+        #print stack;
+        
         for command in commands:
             c = command[0]
             args = command[1:]
@@ -134,6 +140,7 @@ def run(filename):
                 tmp = make_translate(args[0], args[1], args[2])
                 matrix_mult(stack[-1], tmp)
                 if args[3] != None:
+                    print "move: " + args[3] + " " + knob[frame][args[3]]
                     scalar_mult(tmp, knob[frame][args[3]]);
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
@@ -142,7 +149,7 @@ def run(filename):
                 matrix_mult(stack[-1], tmp)
                 #print tmp;
                 if args[3] != None:
-                    #print "scale: " + str(knob[frame][args[3]]);
+                    print "scale: " + args[3] + " " + str(knob[frame][args[3]])
                     scalar_mult(tmp, knob[frame][args[3]]);
                 stack[-1] = [x[:] for x in tmp]
                 #print stack[-1]
@@ -157,8 +164,10 @@ def run(filename):
                     tmp = make_rotZ(theta)
                 matrix_mult( stack[-1], tmp )
                 if args[2] != None:
+                    print "rotate: " + args[2] + " " + str(knob[frame][args[2]])
                     scalar_mult(tmp, knob[frame][args[2]]);
                 stack[-1] = [ x[:] for x in tmp]
+                #print stack[-1];
                 tmp = []
             elif c == 'push':
                 stack.append([x[:] for x in stack[-1]] )
@@ -169,10 +178,10 @@ def run(filename):
             elif c == 'save':
                 save_extension(screen, args[0])
 
-        tmp = new_matrix()
-        ident(tmp);
-        stack = [ [x[:] for x in tmp] ];
         #display(screen);
-        save_extension(screen, 'anim/anim'+str(frame));
+        if frame < 10:
+            save_extension(screen, 'anim/anim0'+str(frame));
+        else:
+            save_extension(screen, 'anim/anim'+str(frame));
         clear_screen(screen);
         print frame;
