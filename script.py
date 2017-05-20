@@ -176,6 +176,11 @@ def run(filename):
                 stack[-1] = [ x[:] for x in tmp]
                 #print stack[-1];
                 tmp = []
+            elif c == "set":
+                knob[frame][args[0]] = float(args[1]);
+            elif c == "set_knobs":
+                for variables in knob[frame]:
+                    knob[frame][variables] = float(args[0]);
             elif c == 'push':
                 stack.append([x[:] for x in stack[-1]] )
             elif c == 'pop':

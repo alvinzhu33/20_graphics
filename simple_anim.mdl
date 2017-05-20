@@ -25,6 +25,6 @@ rotate x -20
 move 20 0 0 mouth
 torus 0 0 0 10 50
 vary mouth 0 12 0 1
-vary mouth 13 24 1 0
-vary mouth 25 37 0 -1
+vary mouth 13 37 1 -1
 vary mouth 38 49 -1 0
+pop
