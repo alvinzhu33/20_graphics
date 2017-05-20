@@ -7,8 +7,8 @@ from draw import *
 
   Checks the commands array for any animation commands
   (frames, basename, vary)
-  
-  Should set num_frames and basename if the frames 
+
+  Should set num_frames and basename if the frames
   or basename commands are present
 
   If vary is found, but frames is not, the entire
@@ -24,11 +24,11 @@ def first_pass( commands ):
     num_frames = 0;
     basename = '';
     varyC = 0;
-    
+
     for command in commands:
         c = command[0]
         args = command[1:]
-        
+
         if c == "frames":
             num_frames = int(args[0]);
         if c == "basename":
@@ -44,7 +44,7 @@ def first_pass( commands ):
         print("Set basename to default: simple");
 
     return num_frames, basename
-        
+
 
 """======== second_pass( commands ) ==========
 
@@ -58,18 +58,18 @@ def first_pass( commands ):
   key will be a knob name, and each value will be the knob's
   value for that frame.
 
-  Go through the command array, and when you find vary, go 
+  Go through the command array, and when you find vary, go
   from knobs[0] to knobs[frames-1] and add (or modify) the
   dictionary corresponding to the given knob with the
-  appropirate value. 
+  appropirate value.
   ===================="""
 def second_pass( commands, num_frames ):
     knob = [dict() for x in range(num_frames)]
-        
+
     for x in range(num_frames):
         for command in commands:
             args = command[1:]
-        
+
             if command[0] == 'vary':
                 if x >= args[1] and x <= args[2]:
                     if x == args[1]:
@@ -102,17 +102,17 @@ def run(filename):
     screen = new_screen()
     tmp = []
     step = 0.1
-    
+
     num_frames, basename = first_pass(commands);
     knob = second_pass(commands, num_frames);
-    
+
     for frame in range(num_frames):
         tmp = new_matrix()
         ident(tmp);
         stack = [ [x[:] for x in tmp] ];
         tmp = []
         #print stack;
-        
+
         for command in commands:
             c = command[0]
             args = command[1:]
@@ -137,24 +137,34 @@ def run(filename):
                 draw_polygons(tmp, screen, color)
                 tmp = []
             elif c == 'move':
+                if args[3] != None:
+                    #print "move: " + args[3] + " " + knob[frame][args[3]]
+                    x = args[0]*knob[frame][args[3]];
+                    y = args[1]*knob[frame][args[3]];
+                    z = args[2]*knob[frame][args[3]];
+                    args = [x, y, z]
                 tmp = make_translate(args[0], args[1], args[2])
                 matrix_mult(stack[-1], tmp)
-                if args[3] != None:
-                    print "move: " + args[3] + " " + knob[frame][args[3]]
-                    scalar_mult(tmp, knob[frame][args[3]]);
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
             elif c == 'scale':
+                if args[3] != None:
+                    #print "scale: " + args[3] + " " + str(knob[frame][args[3]])
+                    x = args[0]*knob[frame][args[3]];
+                    y = args[1]*knob[frame][args[3]];
+                    z = args[2]*knob[frame][args[3]];
+                    args = [x, y, z]
                 tmp = make_scale(args[0], args[1], args[2])
                 matrix_mult(stack[-1], tmp)
                 #print tmp;
-                if args[3] != None:
-                    print "scale: " + args[3] + " " + str(knob[frame][args[3]])
-                    scalar_mult(tmp, knob[frame][args[3]]);
                 stack[-1] = [x[:] for x in tmp]
                 #print stack[-1]
                 tmp = []
             elif c == 'rotate':
+                if args[2] != None:
+                    #print "rotate: " + args[2] + " " + str(knob[frame][args[2]])
+                    angle = args[1] * knob[frame][args[2]];
+                    args = [args[0], angle]
                 theta = args[1] * (math.pi/180)
                 if args[0] == 'x':
                     tmp = make_rotX(theta)
@@ -163,9 +173,6 @@ def run(filename):
                 else:
                     tmp = make_rotZ(theta)
                 matrix_mult( stack[-1], tmp )
-                if args[2] != None:
-                    print "rotate: " + args[2] + " " + str(knob[frame][args[2]])
-                    scalar_mult(tmp, knob[frame][args[2]]);
                 stack[-1] = [ x[:] for x in tmp]
                 #print stack[-1];
                 tmp = []
