@@ -33,14 +33,14 @@ def first_pass( commands ):
             num_frames = int(args[0]);
         if c == "basename":
             basename = args[0];
-        if c == "varyC":
+        if c == "vary":
             varyC += 1;
 
     if varyC > 0 and num_frames == 0:
-        print("Using vary without frames");
+        print "Using vary without frames";
         exit()
     if num_frames and basename == '':
-        basenameC = "simple"
+        basename = "simple"
         print("Set basename to default: simple");
 
     return num_frames, basename
