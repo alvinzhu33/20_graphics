@@ -192,8 +192,9 @@ def run(filename):
 
         #display(screen);
         if frame < 10:
-            save_extension(screen, 'anim/anim0'+str(frame));
+            save_extension(screen, 'anim/' + basename + '0'+str(frame));
         else:
-            save_extension(screen, 'anim/anim'+str(frame));
+            save_extension(screen, 'anim/' + basename + str(frame));
         clear_screen(screen);
         print frame;
+    make_animation(basename)
